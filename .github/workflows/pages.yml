@@ -1,0 +1,44 @@
+name: Deploy ATLAS to GitHub Pages
+
+# Publishes the static site (repo root) to GitHub Pages.
+# `configure-pages` with enablement:true turns Pages on the first time this
+# runs, so no manual toggle in repo Settings is required.
+
+on:
+  push:
+    branches: ["claude/zen-cannon-ne63r5"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Allow one concurrent deployment; don't cancel an in-progress publish.
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure Pages (enables Pages if not already on)
+        uses: actions/configure-pages@v5
+        with:
+          enablement: true
+
+      - name: Upload site artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: "."
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
