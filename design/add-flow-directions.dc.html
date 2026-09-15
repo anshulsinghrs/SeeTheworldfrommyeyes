@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics><meta name="design_doc_mode" content="canvas">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#08080A;color:#F3F2EF;font-family:"IBM Plex Sans",system-ui,sans-serif}
+a{color:#FF7A33;text-decoration:none}a:hover{color:#ffa06b}
+.dv-turn{padding:40px 44px 34px;border-bottom:1px solid rgba(255,255,255,.07);scroll-margin-top:16px}
+.dv-thd{display:flex;align-items:baseline;gap:10px;margin:0 0 22px}
+.dv-tid{font:500 10px "IBM Plex Mono",monospace;padding:3px 7px;background:#FF7A33;color:#120800;border-radius:3px;text-decoration:none}
+.dv-tname{font:400 13px/1.2 "IBM Plex Sans";color:#C9C8C3}
+.dv-opts{display:flex;flex-wrap:wrap;gap:30px;align-items:flex-start}
+.dv-opt{flex:none;display:flex;flex-direction:column;gap:10px;scroll-margin-top:16px}
+.dv-oid{font:500 10.5px "IBM Plex Mono",monospace;padding:3px 7px;background:rgba(255,255,255,.1);color:#F3F2EF;border-radius:3px;text-decoration:none}
+.dv-olabel{display:flex;align-items:baseline;gap:9px;font:300 11.5px/1.4 "IBM Plex Sans";color:rgba(255,255,255,.5);max-width:540px}
+.dv-card{max-width:100%;background:#0C0C0F;border:1px solid rgba(255,255,255,.09);border-radius:4px;box-shadow:0 24px 60px -24px #000;overflow:hidden}
+.dv-opt:target .dv-oid{background:#FF7A33;color:#120800}
+.dv-next{margin:26px 0 0;font:300 12px/1.6 "IBM Plex Sans";color:rgba(255,255,255,.45)}
+.lbl{font-family:"IBM Plex Mono",monospace;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:#7E7E79}
+.mono{font-family:"IBM Plex Mono",monospace}
+.frame{position:relative;width:540px;height:330px;background:radial-gradient(120% 90% at 50% 0%,#0C0D11,#08080A 70%);overflow:hidden}
+.frame + .frame{border-top:1px solid rgba(255,255,255,.07)}
+.fbar{position:absolute;top:0;left:0;right:0;height:34px;display:flex;align-items:center;justify-content:space-between;padding:0 11px;border-bottom:1px solid rgba(255,255,255,.055);background:rgba(8,8,10,.8);z-index:3}
+.wm{font-weight:600;font-size:10px;letter-spacing:.3em}
+.pill{font-family:"IBM Plex Mono",monospace;font-size:8.5px;letter-spacing:.1em;text-transform:uppercase;border:1px solid rgba(255,255,255,.12);border-radius:2px;padding:3px 6px;color:#9A9A95}
+.pill.acc{background:#FF7A33;border-color:#FF7A33;color:#120800}
+.fcap{position:absolute;left:11px;bottom:8px;z-index:4;font-family:"IBM Plex Mono",monospace;font-size:8.5px;letter-spacing:.14em;text-transform:uppercase;color:#5A5A56}
+.tag{font-family:"IBM Plex Mono",monospace;font-size:8.5px;letter-spacing:.1em;text-transform:uppercase;padding:2px 5px;border-radius:2px;border:1px solid rgba(255,255,255,.12);color:#7E7E79}
+.tag.ok{border-color:rgba(69,192,139,.4);color:#6DD3A7}.tag.ai{border-color:rgba(255,122,51,.4);color:#FFA06B}
+.bar{width:40px;height:3px;background:rgba(255,255,255,.1);border-radius:2px;overflow:hidden;display:inline-block;vertical-align:middle}
+.bar i{display:block;height:100%}
+</style></helmet>
+
+<section class="dv-turn" id="t1">
+<div class="dv-thd"><a class="dv-tid" href="#t1">1</a><span class="dv-tname">“Add Anything” — three directions for the same pipeline (input → understanding → confirm)</span></div>
+<div class="dv-opts">
+
+<div class="dv-opt" id="1a">
+  <div class="dv-olabel"><a class="dv-oid" href="#1a">1a</a>Command panel — one input, then a checklist of found relationships. Fast, keyboard-first, map stays visible behind. This is the one wired up live in <a href="../index.html">the ATLAS app</a>.</div>
+  <div class="dv-card">
+    <div class="frame">
+      <div class="fbar"><span class="wm">ATLAS</span><span class="pill acc">+ add</span></div>
+      <div style="position:absolute;inset:34px 0 0;background:radial-gradient(100% 80% at 40% 40%,rgba(255,255,255,.028),transparent 70%)"></div>
+      <div style="position:absolute;left:50%;top:70px;transform:translateX(-50%);width:430px;background:rgba(14,14,17,.97);border:1px solid rgba(255,255,255,.13);border-radius:4px;box-shadow:0 30px 70px -20px #000;overflow:hidden">
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 13px;border-bottom:1px solid rgba(255,255,255,.055)"><span class="lbl">add to atlas</span><span class="pill">add manually</span></div>
+        <div style="padding:18px 14px 8px;font-weight:300;font-size:16px;color:#5A5A56">Anything — a link, a book title, a sentence…</div>
+        <div style="display:flex;gap:6px;padding:0 14px 14px"><span class="tag">url</span><span class="tag">file</span><span class="tag">text</span><span class="tag">image</span></div>
+        <div style="border-top:1px solid rgba(255,255,255,.055);padding:9px 14px 12px">
+          <div class="lbl" style="margin-bottom:8px">try one</div>
+          <div style="font-size:12px;color:#C9C8C3;line-height:1.9">The God of Small Things<br>https://example.news/metro-phase-3<br>sidewalk-transit-access.pdf</div>
+        </div>
+      </div>
+      <div class="fcap">state 1 · input</div>
+    </div>
+    <div class="frame">
+      <div class="fbar"><span class="wm">ATLAS</span><span class="pill">nothing saved until you confirm</span></div>
+      <div style="position:absolute;left:50%;top:48px;transform:translateX(-50%);width:430px;background:rgba(14,14,17,.97);border:1px solid rgba(255,255,255,.13);border-radius:4px;box-shadow:0 30px 70px -20px #000;overflow:hidden">
+        <div style="display:flex;gap:13px;padding:14px 14px 10px">
+          <div style="width:38px;height:38px;border:1px solid rgba(255,255,255,.1);border-radius:3px;display:grid;place-items:center;flex:none"><svg width="17" height="17" viewBox="0 0 16 16" fill="none" stroke="#FF7A33" stroke-width="1.1"><path d="M3 3.5h7a1.5 1.5 0 0 1 1.5 1.5v7.5H4.5A1.5 1.5 0 0 1 3 11z"/><path d="M13 3.5v9"/></svg></div>
+          <div><div class="lbl">i think this is · book · 96% confident</div>
+            <div style="font-weight:300;font-size:16px;margin:6px 0 3px">The God of Small Things</div>
+            <div style="font-size:11.5px;color:#7E7E79">Arundhati Roy · 1997</div></div>
+        </div>
+        <div style="padding:2px 14px 8px" class="lbl">geographic relationships found · pick what belongs on your map</div>
+        <div style="border-top:1px solid rgba(255,255,255,.055);padding:9px 14px;background:rgba(255,122,51,.055);display:flex;gap:10px">
+          <span style="width:11px;height:11px;border-radius:2px;background:#FF7A33;margin-top:3px;flex:none"></span>
+          <div><div style="font-size:12.5px">Aymanam, Kerala<span style="color:#5A5A56">, India</span></div>
+          <div style="display:flex;gap:6px;align-items:center;margin-top:5px"><span class="mono" style="font-size:9px;letter-spacing:.1em;color:#B07CE8">SET_IN</span><span class="tag">locality</span><span class="tag ai">ai suggestion</span><span class="bar"><i style="width:93%;background:#B07CE8"></i></span><span class="mono" style="font-size:9px;color:#7E7E79">93%</span></div></div>
+        </div>
+        <div style="border-top:1px solid rgba(255,255,255,.055);padding:9px 14px;display:flex;gap:10px">
+          <span style="width:11px;height:11px;border-radius:2px;border:1px solid rgba(255,255,255,.28);margin-top:3px;flex:none"></span>
+          <div><div style="font-size:12.5px">Shillong<span style="color:#5A5A56">, India</span></div>
+          <div style="display:flex;gap:6px;align-items:center;margin-top:5px"><span class="mono" style="font-size:9px;letter-spacing:.1em;color:#FF7A33">BORN_IN</span><span class="tag">city</span><span class="tag">low confidence</span><span class="bar"><i style="width:81%;background:#FF7A33"></i></span><span class="mono" style="font-size:9px;color:#7E7E79">81%</span></div></div>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:11px 13px;border-top:1px solid rgba(255,255,255,.09);background:rgba(255,255,255,.02)">
+          <span class="pill">back</span><div style="display:flex;gap:7px"><span class="pill">add another location</span><span class="pill acc">add to map</span></div></div>
+      </div>
+      <div class="fcap">state 2 · confirm</div>
+    </div>
+  </div>
+</div>
+
+<div class="dv-opt" id="1b">
+  <div class="dv-olabel"><a class="dv-oid" href="#1b">1b</a>Inspector drawer — extraction never covers the map. Candidates appear as ghost pins you accept in place; the drawer exposes the full pipeline, so uncertainty is auditable.</div>
+  <div class="dv-card">
+    <div class="frame">
+      <div class="fbar"><span class="wm">ATLAS</span><span class="pill">drawer · extraction</span></div>
+      <div style="position:absolute;left:0;top:34px;bottom:0;right:210px">
+        <svg width="330" height="296" viewBox="0 0 330 296" style="position:absolute;inset:0">
+          <g fill="none" stroke="rgba(255,255,255,.06)"><ellipse cx="165" cy="150" rx="150" ry="118"/><path d="M15 150h300M60 60c60 50 145 50 210 0M60 240c60-50 145-50 210 0"/></g>
+          <g stroke="rgba(255,255,255,.12)" fill="rgba(255,255,255,.035)"><path d="M120 95c22-16 52-10 68 8s14 44-6 58-52 10-66-10-18-40 4-56Z"/><path d="M196 150c16-6 34 4 38 20s-8 30-24 30-26-14-24-28Z"/></g>
+          <g><circle cx="152" cy="140" r="13" fill="rgba(176,124,232,.1)" stroke="#B07CE8" stroke-dasharray="3 3"/><circle cx="152" cy="140" r="3" fill="#B07CE8"/>
+             <circle cx="206" cy="112" r="13" fill="rgba(255,122,51,.08)" stroke="#FF7A33" stroke-dasharray="3 3"/><circle cx="206" cy="112" r="3" fill="#FF7A33"/></g>
+          <g font-family="IBM Plex Sans" font-size="9" fill="rgba(255,255,255,.55)"><text x="170" y="143">Aymanam</text><text x="224" y="115">Shillong</text></g>
+        </svg>
+        <div style="position:absolute;left:14px;bottom:12px;display:flex;gap:6px;align-items:center"><span class="tag ai">2 candidate pins</span><span class="tag">click a pin to accept</span></div>
+      </div>
+      <div style="position:absolute;right:0;top:34px;bottom:0;width:210px;border-left:1px solid rgba(255,255,255,.09);background:rgba(13,13,16,.92);overflow:hidden">
+        <div style="padding:10px 12px;border-bottom:1px solid rgba(255,255,255,.055)"><span class="lbl">pipeline</span></div>
+        <div style="padding:10px 12px;font-size:10.5px;line-height:1.5;color:#C9C8C3">
+          <div style="color:#5A5A56" class="lbl">input</div>
+          <div style="margin:3px 0 9px">“The God of Small Things”</div>
+          <div style="color:#5A5A56" class="lbl">object type</div>
+          <div style="margin:3px 0 9px">BOOK <span class="tag ok" style="margin-left:4px">96%</span></div>
+          <div style="color:#5A5A56" class="lbl">entities</div>
+          <div style="margin:3px 0 9px">Arundhati Roy · 1997 · Kerala</div>
+          <div style="color:#5A5A56" class="lbl">relationships</div>
+          <div style="margin:3px 0 0;display:flex;flex-direction:column;gap:6px">
+            <div style="display:flex;align-items:center;gap:6px"><span style="width:6px;height:6px;border-radius:50%;background:#B07CE8"></span>SET_IN <span class="tag" style="margin-left:auto">93%</span></div>
+            <div style="display:flex;align-items:center;gap:6px"><span style="width:6px;height:6px;border-radius:50%;background:#FF7A33"></span>BORN_IN <span class="tag" style="margin-left:auto">81%</span></div>
+          </div>
+        </div>
+        <div style="position:absolute;left:0;right:0;bottom:0;padding:10px 12px;border-top:1px solid rgba(255,255,255,.09);display:flex;gap:6px"><span class="pill" style="flex:1;text-align:center">edit</span><span class="pill acc" style="flex:1;text-align:center">accept 1</span></div>
+      </div>
+      <div class="fcap" style="left:auto;right:222px">map stays live</div>
+    </div>
+    <div class="frame">
+      <div class="fbar"><span class="wm">ATLAS</span><span class="pill">drawer · input</span></div>
+      <div style="position:absolute;right:0;top:34px;bottom:0;width:210px;border-left:1px solid rgba(255,255,255,.09);background:rgba(13,13,16,.92)">
+        <div style="padding:10px 12px;border-bottom:1px solid rgba(255,255,255,.055)"><span class="lbl">add anything</span></div>
+        <div style="padding:14px 12px 10px;font-size:12px;font-weight:300;color:#5A5A56;line-height:1.5">Paste, drop, or type…</div>
+        <div style="margin:0 12px;border:1px dashed rgba(255,255,255,.14);border-radius:3px;padding:16px 10px;text-align:center;color:#5A5A56;font-size:10.5px">drop a PDF, image<br>or URL here</div>
+        <div style="padding:14px 12px"><div class="lbl" style="margin-bottom:7px">recent inputs</div>
+          <div style="font-size:10.5px;color:#7E7E79;line-height:1.9">metro-phase-3.html<br>sidewalk-access.pdf<br>roofline.jpg</div></div>
+      </div>
+      <div style="position:absolute;left:24px;top:80px;max-width:250px;font-size:11px;line-height:1.6;color:#5A5A56">The drawer is the only chrome that ever moves. Panning while a candidate is open is allowed — you can check the geography before you accept it.</div>
+      <div class="fcap">state 1 · input</div>
+    </div>
+  </div>
+</div>
+
+<div class="dv-opt" id="1c">
+  <div class="dv-olabel"><a class="dv-oid" href="#1c">1c</a>One question at a time — the system commits to a reading, then asks a single decisive question. Least cognitive load, best on mobile, slowest for a paper with five locations.</div>
+  <div class="dv-card">
+    <div class="frame">
+      <div class="fbar"><span class="wm">ATLAS</span><span class="pill">question 1 of 2</span></div>
+      <div style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:400px;text-align:center">
+        <div class="lbl">i read this as</div>
+        <div style="font-size:13px;color:#C9C8C3;margin:9px 0 2px"><span class="mono" style="color:#FF7A33">BOOK</span> · 96%</div>
+        <div style="font-weight:300;font-size:22px;letter-spacing:-.01em;margin:6px 0 4px">The God of Small Things</div>
+        <div style="font-size:12px;color:#7E7E79;margin-bottom:22px">Arundhati Roy · 1997</div>
+        <div style="font-size:14px;font-weight:300;margin-bottom:14px">Two places are connected. Which one belongs on your map?</div>
+        <div style="display:flex;gap:9px;justify-content:center;flex-wrap:wrap">
+          <div style="border:1px solid rgba(176,124,232,.45);background:rgba(176,124,232,.08);border-radius:3px;padding:9px 13px;text-align:left">
+            <div style="font-size:12.5px">Aymanam, Kerala</div><div class="mono" style="font-size:8.5px;letter-spacing:.12em;color:#B07CE8;margin-top:3px">SET_IN · 93%</div></div>
+          <div style="border:1px solid rgba(255,122,51,.4);background:rgba(255,122,51,.06);border-radius:3px;padding:9px 13px;text-align:left">
+            <div style="font-size:12.5px">Shillong</div><div class="mono" style="font-size:8.5px;letter-spacing:.12em;color:#FF7A33;margin-top:3px">BORN_IN · 81%</div></div>
+          <div style="border:1px solid rgba(255,255,255,.14);border-radius:3px;padding:9px 13px"><div style="font-size:12.5px">Both</div><div class="mono" style="font-size:8.5px;letter-spacing:.12em;color:#7E7E79;margin-top:3px">two pins</div></div>
+        </div>
+        <div style="margin-top:20px;display:flex;gap:9px;justify-content:center"><span class="pill">not a book</span><span class="pill">neither · pick a place myself</span></div>
+      </div>
+      <div class="fcap">state 2 · single question</div>
+    </div>
+    <div class="frame" style="height:190px">
+      <div class="fbar"><span class="wm">ATLAS</span><span class="pill">question 2 of 2</span></div>
+      <div style="position:absolute;left:50%;top:54%;transform:translate(-50%,-50%);width:400px;text-align:center">
+        <div style="font-size:14px;font-weight:300;margin-bottom:14px">When does this belong in time?</div>
+        <div style="display:flex;gap:9px;justify-content:center">
+          <span class="pill" style="padding:8px 12px">1997 · published</span><span class="pill acc" style="padding:8px 12px">2026 · when i read it</span><span class="pill" style="padding:8px 12px">no date</span></div>
+      </div>
+      <div class="fcap">state 3 · time</div>
+    </div>
+  </div>
+</div>
+
+</div>
+<p class="dv-next">Try next: “wire <a class="dv-oid" href="#1b">1b</a> into the live map instead of <a class="dv-oid" href="#1a">1a</a>” · “make <a class="dv-oid" href="#1c">1c</a> the mobile flow and keep <a class="dv-oid" href="#1a">1a</a> on desktop” · “show the research-paper case with five locations in <a class="dv-oid" href="#1a">1a</a>”</p>
+</section>
+
+</x-dc>
+</body>
+</html>

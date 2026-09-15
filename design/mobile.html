@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ATLAS — mobile</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/d3@7.9.0/dist/d3.min.js" integrity="sha384-CjloA8y00+1SDAUkjs099PVfnY2KmDC2BZnws9kh8D/lX1s46w6EPhpXdqMfjK6i" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/topojson-client@3.1.0/dist/topojson-client.min.js" integrity="sha384-Ukv1p/xTma6P4/2bY5KzWBw+ydSpXmhCMtyciIQVDJ1RmOxtCYNMF1uXT9T63H67" crossorigin="anonymous"></script>
+<style>
+:root{--ink:#F3F2EF;--ink2:#C9C8C3;--mute:#7E7E79;--mute2:#5A5A56;--line:rgba(255,255,255,.09);--accent:#FF7A33}
+*{box-sizing:border-box}
+body{margin:0;background:#08080A;color:var(--ink);font-family:"IBM Plex Sans",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:var(--accent);text-decoration:none}a:hover{color:#ffa06b}
+.lbl{font-family:"IBM Plex Mono",monospace;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--mute)}
+.mono{font-family:"IBM Plex Mono",monospace}
+.hd{padding:38px 44px 22px}
+.hd h1{font-weight:300;font-size:22px;letter-spacing:-.01em;margin:8px 0 6px}
+.hd p{margin:0;font-size:12.5px;color:var(--mute);max-width:60ch;line-height:1.6}
+.row{display:flex;gap:44px;padding:8px 44px 60px;flex-wrap:wrap}
+.ph{width:390px;flex:none}
+.ph .cap{margin:12px 0 0;font-size:11.5px;color:var(--mute);line-height:1.55}
+.ph .cap b{display:block;color:var(--ink2);font-family:"IBM Plex Mono",monospace;font-size:9px;letter-spacing:.16em;text-transform:uppercase;margin-bottom:4px}
+.shell{position:relative;width:390px;height:790px;border-radius:44px;background:#0A0A0C;border:1px solid rgba(255,255,255,.14);
+  box-shadow:0 40px 90px -30px #000,inset 0 0 0 7px #16161A;overflow:hidden}
+.scr{position:absolute;inset:7px;border-radius:37px;overflow:hidden;background:radial-gradient(120% 80% at 50% 0%,#0C0D11,#08080A 70%)}
+.sb{position:absolute;top:0;left:0;right:0;height:46px;display:flex;align-items:center;justify-content:space-between;padding:12px 26px 0;z-index:6;font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--ink2)}
+.notch{position:absolute;top:9px;left:50%;transform:translateX(-50%);width:104px;height:26px;border-radius:14px;background:#000;z-index:7}
+.tbar{position:absolute;top:50px;left:12px;right:12px;height:38px;display:flex;align-items:center;gap:9px;padding:0 12px;z-index:5;
+  background:rgba(14,14,17,.86);backdrop-filter:blur(14px);border:1px solid var(--line);border-radius:3px}
+.tbar span{font-size:12.5px;color:var(--mute2);flex:1}
+.wm{font-weight:600;font-size:11px;letter-spacing:.3em}
+.fab{position:absolute;right:16px;bottom:120px;z-index:6;width:52px;height:52px;border-radius:50%;background:var(--accent);
+  display:grid;place-items:center;box-shadow:0 14px 30px -8px rgba(255,122,51,.6)}
+.sheet{position:absolute;left:0;right:0;bottom:0;z-index:6;background:rgba(13,13,16,.96);backdrop-filter:blur(18px);
+  border-top:1px solid var(--line);border-radius:14px 14px 0 0;box-shadow:0 -20px 50px -20px #000}
+.grab{width:34px;height:3px;border-radius:2px;background:rgba(255,255,255,.2);margin:9px auto 0}
+.tb{position:absolute;left:0;right:0;bottom:0;height:62px;z-index:7;display:flex;align-items:center;justify-content:space-around;
+  padding-bottom:12px;border-top:1px solid var(--line);background:rgba(10,10,12,.94)}
+.tb div{display:flex;flex-direction:column;align-items:center;gap:5px;font-family:"IBM Plex Mono",monospace;font-size:8px;letter-spacing:.12em;text-transform:uppercase;color:var(--mute2)}
+.tb div.on{color:var(--accent)}
+.tag{font-family:"IBM Plex Mono",monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;padding:2px 5px;border-radius:2px;border:1px solid var(--line);color:var(--mute)}
+.tag.ok{border-color:rgba(69,192,139,.4);color:#6DD3A7}.tag.ai{border-color:rgba(255,122,51,.4);color:#FFA06B}
+.bar{width:38px;height:3px;background:rgba(255,255,255,.1);border-radius:2px;overflow:hidden;display:inline-block;vertical-align:middle}
+.bar i{display:block;height:100%}
+.pill{font-family:"IBM Plex Mono",monospace;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;border:1px solid var(--line);border-radius:3px;padding:9px 12px;color:var(--ink2);display:inline-block}
+.pill.acc{background:var(--accent);border-color:var(--accent);color:#120800}
+.scrim{position:absolute;inset:0;background:rgba(5,5,6,.66);z-index:5}
+.loc{display:grid;grid-template-columns:8px 1fr;gap:11px;padding:11px 0;border-top:1px solid rgba(255,255,255,.055)}
+.dot{width:8px;height:8px;border-radius:50%;margin-top:4px}
+</style>
+</head>
+<body>
+<div class="hd"><span class="lbl">Atlas · mobile</span>
+  <h1>Same model, thumb-first</h1>
+  <p>The map keeps the whole screen; every panel is a sheet. Add uses the one-question-at-a-time flow (direction <a href="add-flow-directions.dc.html">1c</a>) because a checklist of five relationships does not survive a 390pt column. Live app: <a href="../index.html">open ATLAS</a>.</p>
+</div>
+<div class="row">
+
+<div class="ph">
+  <div class="shell"><div class="scr">
+    <div class="notch"></div>
+    <div class="sb"><span>9:41</span><span>ATLAS</span></div>
+    <svg id="m1" width="376" height="776" style="position:absolute;inset:0"></svg>
+    <div class="tbar"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="#7E7E79" stroke-width="1.4"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span>Search your atlas</span><span class="wm" style="flex:none;color:var(--mute2)">127</span></div>
+    <div class="fab"><svg width="18" height="18" viewBox="0 0 12 12" stroke="#120800" stroke-width="1.7"><path d="M6 1v10M1 6h10"/></svg></div>
+    <div class="sheet" style="height:172px">
+      <div class="grab"></div>
+      <div style="padding:14px 18px 0;display:flex;justify-content:space-between;align-items:baseline">
+        <div><span class="lbl">my atlas</span><div class="mono" style="font-size:26px;margin-top:4px">127</div></div>
+        <div style="text-align:right;font-size:11px;color:var(--mute);line-height:1.7">89 locations<br>31 countries<br>214 relationships</div>
+      </div>
+      <div style="display:flex;gap:7px;padding:14px 18px 0;overflow:hidden">
+        <span class="tag">books 73</span><span class="tag">news 32</span><span class="tag">papers 14</span><span class="tag">people 5</span>
+      </div>
+    </div>
+    <div class="tb">
+      <div class="on"><svg width="17" height="17" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2"><circle cx="8" cy="8" r="5.6"/><path d="M2.4 8h11.2M8 2.4c2.8 3 2.8 8.2 0 11.2M8 2.4c-2.8 3-2.8 8.2 0 11.2"/></svg>Map</div>
+      <div><svg width="17" height="17" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M8 1.6 14.4 5 8 8.4 1.6 5 8 1.6Z"/><path d="M2.4 8.6 8 11.6l5.6-3"/></svg>Layers</div>
+      <div><svg width="17" height="17" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2"><circle cx="8" cy="8" r="5.6"/><path d="M8 5v3.3l2.2 1.4"/></svg>Timeline</div>
+      <div><svg width="17" height="17" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2"><circle cx="8" cy="6" r="2.4"/><path d="M3.8 13.2a4.4 4.4 0 0 1 8.4 0"/></svg>Me</div>
+    </div>
+  </div></div>
+  <p class="cap"><b>Map home</b>Clusters carry a ring segment per relationship type, so a cluster tells you what kind of connection it holds before you open it.</p>
+</div>
+
+<div class="ph">
+  <div class="shell"><div class="scr">
+    <div class="notch"></div>
+    <div class="sb"><span>9:41</span><span>ATLAS</span></div>
+    <svg id="m2" width="376" height="776" style="position:absolute;inset:0"></svg>
+    <div class="scrim"></div>
+    <div class="sheet" style="height:470px">
+      <div class="grab"></div>
+      <div style="padding:16px 18px 0;display:flex;justify-content:space-between;align-items:center"><span class="lbl">add to atlas</span><span class="mono" style="font-size:9px;color:var(--mute2)">STEP 2 / 3</span></div>
+      <div style="padding:18px 18px 0">
+        <span class="lbl">i read this as</span>
+        <div style="display:flex;align-items:center;gap:8px;margin:8px 0 4px"><span class="mono" style="color:var(--accent);font-size:12px">BOOK</span><span class="tag ok">96%</span></div>
+        <div style="font-weight:300;font-size:21px;line-height:1.25;margin:8px 0 5px">The God of Small Things</div>
+        <div style="font-size:12.5px;color:var(--mute)">Arundhati Roy · 1997</div>
+      </div>
+      <div style="padding:22px 18px 0;font-size:15px;font-weight:300;line-height:1.4">Two places are connected.<br>Which belongs on your map?</div>
+      <div style="padding:16px 18px 0;display:flex;flex-direction:column;gap:9px">
+        <div style="border:1px solid rgba(176,124,232,.45);background:rgba(176,124,232,.08);border-radius:3px;padding:12px 13px;display:flex;justify-content:space-between;align-items:center">
+          <div><div style="font-size:13.5px">Aymanam, Kerala</div><div class="mono" style="font-size:9px;letter-spacing:.12em;color:#B07CE8;margin-top:4px">SET_IN · LOCALITY</div></div>
+          <span class="bar"><i style="width:93%;background:#B07CE8"></i></span></div>
+        <div style="border:1px solid var(--line);border-radius:3px;padding:12px 13px;display:flex;justify-content:space-between;align-items:center">
+          <div><div style="font-size:13.5px">Shillong</div><div class="mono" style="font-size:9px;letter-spacing:.12em;color:#FF7A33;margin-top:4px">BORN_IN · CITY</div></div>
+          <span class="bar"><i style="width:81%;background:#FF7A33"></i></span></div>
+        <div style="border:1px solid var(--line);border-radius:3px;padding:12px 13px;font-size:13.5px">Both</div>
+      </div>
+      <div style="padding:16px 18px 0;display:flex;gap:8px"><span class="pill" style="flex:1;text-align:center">Not a book</span><span class="pill" style="flex:1;text-align:center">Pick place myself</span></div>
+    </div>
+  </div></div>
+  <p class="cap"><b>Add anything</b>One question per screen, 48pt targets, and an escape hatch on every step. Nothing reaches the map before the last tap.</p>
+</div>
+
+<div class="ph">
+  <div class="shell"><div class="scr">
+    <div class="notch"></div>
+    <div class="sb"><span>9:41</span><span>ATLAS</span></div>
+    <svg id="m3" width="376" height="776" style="position:absolute;inset:0"></svg>
+    <div class="sheet" style="height:520px">
+      <div class="grab"></div>
+      <div style="padding:14px 18px 0;display:flex;justify-content:space-between;align-items:center">
+        <span class="tag"><svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="#B07CE8" stroke-width="1.3" style="vertical-align:-1px;margin-right:4px"><path d="M3 3.5h7a1.5 1.5 0 0 1 1.5 1.5v7.5H4.5A1.5 1.5 0 0 1 3 11z"/><path d="M13 3.5v9"/></svg>BOOK</span>
+        <span class="tag">private</span></div>
+      <div style="padding:14px 18px 0">
+        <div style="font-weight:300;font-size:22px;line-height:1.24;letter-spacing:-.01em">The God of Small Things</div>
+        <div style="font-size:12.5px;color:var(--mute);margin-top:6px">Arundhati Roy · 1997</div>
+        <p style="font-size:13px;line-height:1.6;color:var(--ink2);margin:12px 0 0">Debut novel following twins in a Kerala riverside town; the setting is inseparable from the prose.</p>
+      </div>
+      <div style="padding:18px 18px 0"><span class="lbl">geographic relationships · 2</span>
+        <div class="loc" style="border-top:0"><span class="dot" style="background:#B07CE8"></span>
+          <div><div style="font-size:13.5px">Aymanam, Kerala<span style="color:var(--mute2)">, India</span></div>
+          <div style="display:flex;gap:6px;align-items:center;margin-top:6px;flex-wrap:wrap"><span class="mono" style="font-size:9px;letter-spacing:.12em;color:#B07CE8">SET_IN</span><span class="tag">locality</span><span class="tag ok">confirmed</span><span class="bar"><i style="width:93%;background:#B07CE8"></i></span></div></div></div>
+        <div class="loc"><span class="dot" style="background:#FF7A33"></span>
+          <div><div style="font-size:13.5px">Shillong<span style="color:var(--mute2)">, India</span></div>
+          <div style="display:flex;gap:6px;align-items:center;margin-top:6px;flex-wrap:wrap"><span class="mono" style="font-size:9px;letter-spacing:.12em;color:#FF7A33">BORN_IN</span><span class="tag">city</span><span class="tag ai">ai suggestion</span><span class="bar"><i style="width:88%;background:#FF7A33"></i></span></div></div></div>
+      </div>
+      <div style="padding:18px 18px 0"><span class="lbl">private note</span>
+        <p style="font-size:13px;line-height:1.6;color:var(--ink2);border-left:1px solid rgba(255,122,51,.5);padding-left:11px;margin:9px 0 0">Re-read the chapter on the river before writing the Kerala water-access section.</p></div>
+      <div style="padding:18px 18px 0;display:flex;gap:8px"><span class="pill" style="flex:1;text-align:center">Graph</span><span class="pill" style="flex:1;text-align:center">Edit</span><span class="pill acc" style="flex:1;text-align:center">Open source</span></div>
+    </div>
+  </div></div>
+  <p class="cap"><b>Object detail</b>Relationship, resolution, confidence and provenance stay visible — the sheet never flattens a suggestion into a fact.</p>
+</div>
+
+</div>
+<script>
+const REL={SET_IN:'#B07CE8',BORN_IN:'#FF7A33',HAPPENED_AT:'#E5484D',STUDY_AREA:'#45C08B',AUTHOR_INSTITUTION:'#4C93E8',VISITED:'#2FC8C8',LOCATED_AT:'#7C8BE8',ABOUT:'#8A8A85',FILMED_IN:'#E8679B',PUBLISHED_IN:'#E3B341'};
+const PTS=[[76.44,9.62,'SET_IN'],[91.88,25.57,'BORN_IN'],[77.21,28.61,'SET_IN'],[72.88,19.08,'HAPPENED_AT'],[85.82,20.30,'STUDY_AREA'],
+[135.77,35.01,'VISITED'],[139.77,35.67,'LOCATED_AT'],[103.82,1.35,'ABOUT'],[90.41,23.81,'STUDY_AREA'],[4.90,52.37,'PUBLISHED_IN'],
+[-0.13,51.51,'HAPPENED_AT'],[18.07,59.33,'HAPPENED_AT'],[8.54,47.37,'AUTHOR_INSTITUTION'],[-8.61,41.15,'ABOUT'],[12.32,45.44,'SET_IN'],
+[-74.01,40.71,'BORN_IN'],[-77.04,38.90,'PUBLISHED_IN'],[-79.38,43.65,'ABOUT'],[-113.98,50.72,'FILMED_IN'],[-16.88,64.01,'FILMED_IN'],
+[3.39,6.45,'HAPPENED_AT'],[36.82,-1.29,'AUTHOR_INSTITUTION'],[-0.19,5.60,'STUDY_AREA'],[29.91,31.21,'LOCATED_AT'],[35.42,29.58,'FILMED_IN'],
+[-49.27,-25.43,'ABOUT'],[-71.62,-33.05,'LOCATED_AT'],[151.21,-33.87,'ABOUT'],[100,60,'STUDY_AREA'],[84,28,'STUDY_AREA']];
+const G_BOOK='<path d="M3 3.5h7a1.5 1.5 0 0 1 1.5 1.5v7.5H4.5A1.5 1.5 0 0 1 3 11z"/><path d="M13 3.5v9"/>';
+d3.json('https://cdn.jsdelivr.net/npm/world-atlas@2.0.2/countries-110m.json').then(topo=>{
+  const land=topojson.feature(topo,topo.objects.countries);
+  const views=[
+    {id:'m1',proj:d3.geoNaturalEarth1().fitExtent([[10,150],[366,600]],{type:'Sphere'}),cluster:true},
+    {id:'m2',proj:d3.geoMercator().center([80,14]).scale(420).translate([188,300]),cluster:true},
+    {id:'m3',proj:d3.geoMercator().center([76.6,9.8]).scale(9000).translate([188,190]),focus:true}
+  ];
+  views.forEach(v=>{
+    const svg=d3.select('#'+v.id),p=d3.geoPath(v.proj);
+    svg.append('path').datum(d3.geoGraticule10()).attr('d',p).attr('fill','none').attr('stroke','rgba(255,255,255,.035)');
+    svg.append('path').attr('d',p(land)).attr('fill','#161719').attr('stroke','rgba(255,255,255,.10)').attr('stroke-width',.6);
+    if(v.focus){
+      const c=v.proj([76.44,9.62]);
+      svg.append('circle').attr('cx',c[0]).attr('cy',c[1]).attr('r',26).attr('fill','none').attr('stroke','#B07CE8').attr('stroke-opacity',.25);
+      const g=svg.append('g').attr('transform','translate('+c[0]+','+c[1]+')');
+      g.append('circle').attr('r',13).attr('fill','#0C0C0F').attr('stroke','#B07CE8').attr('stroke-width',1.5);
+      g.append('g').attr('transform','translate(-9,-9) scale(1.12)').html('<g fill="none" stroke="#B07CE8" stroke-width="1.1" stroke-linecap="round">'+G_BOOK+'</g>');
+      svg.append('text').attr('x',c[0]+20).attr('y',c[1]+4).attr('fill','rgba(255,255,255,.6)').attr('font-size',11).attr('font-family','IBM Plex Sans').text('Aymanam');
+      return;
+    }
+    // project + grid cluster in screen space
+    const R=44,grid=new Map();
+    PTS.forEach(([lng,lat,rel])=>{const q=v.proj([lng,lat]);if(!q)return;
+      if(q[0]<14||q[0]>362||q[1]<110||q[1]>620)return;
+      const k=Math.round(q[0]/R)+':'+Math.round(q[1]/R);
+      if(!grid.has(k))grid.set(k,[]);grid.get(k).push({x:q[0],y:q[1],rel});});
+    grid.forEach(arr=>{
+      const x=d3.mean(arr,d=>d.x),y=d3.mean(arr,d=>d.y),g=svg.append('g').attr('transform','translate('+x+','+y+')');
+      if(arr.length===1){
+        const c=REL[arr[0].rel]||'#8A8A85';
+        g.append('circle').attr('r',13).attr('fill','#0C0C0F').attr('stroke',c).attr('stroke-width',1.4);
+        g.append('circle').attr('r',3.4).attr('fill',c);
+      } else {
+        const r=Math.min(24,12+Math.sqrt(arr.length)*2.8);
+        g.append('circle').attr('r',r+6).attr('fill','rgba(255,122,51,.06)');
+        g.append('circle').attr('r',r).attr('fill','rgba(12,12,15,.92)').attr('stroke','rgba(255,255,255,.3)');
+        const cols=[...new Set(arr.map(a=>REL[a.rel]||'#8A8A85'))];
+        cols.forEach((c,i)=>{const a0=i/cols.length*2*Math.PI-Math.PI/2,a1=(i+1)/cols.length*2*Math.PI-Math.PI/2;
+          g.append('path').attr('d',d3.arc()({innerRadius:r+1.5,outerRadius:r+3.4,startAngle:a0+.06,endAngle:a1-.06})).attr('fill',c).attr('opacity',.85);});
+        g.append('text').attr('text-anchor','middle').attr('dy',4.5).attr('fill','#F3F2EF').attr('font-size',13).attr('font-family','IBM Plex Mono').text(arr.length);
+      }
+    });
+  });
+});
+</script>
+</body>
+</html>
