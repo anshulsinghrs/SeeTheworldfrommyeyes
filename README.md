@@ -15,7 +15,8 @@ or sentence and lets you confirm what belongs on your map before it lands.
 
 ## Run it
 
-It's a static site — no build step, no backend.
+It's a static site — no build step, no backend. **Serve it over HTTP** (the map
+data is loaded with `fetch`, which browsers block on `file://`):
 
 ```bash
 # any static server works; from the repo root:
@@ -23,7 +24,9 @@ python3 -m http.server 8000
 # then open http://localhost:8000/
 ```
 
-Opening `index.html` directly with `file://` also works.
+Opening `index.html` straight off disk (`file://`) shows the UI and plots every
+object, but the country outlines won't load — the app detects this and tells you
+to serve the folder. On GitHub Pages / any real host it just works.
 
 ## Deploy (GitHub Pages)
 
@@ -50,15 +53,26 @@ the repository root, so the Pages URL loads straight into the map.
   app still runs — objects plot on the graticule sphere — and shows a
   "Basemap offline" notice instead of failing silently.
 
+## Basemap — India point of view
+
+The country outlines are served **locally** from
+[`basemap/countries-india-pov.json`](basemap/countries-india-pov.json), not a CDN.
+It is built from Natural Earth's official **India point-of-view** admin-0 dataset
+(`ne_10m_admin_0_countries_ind`), so the whole of Jammu & Kashmir — including
+Gilgit-Baltistan / PoK and Aksai Chin — is rendered as part of India, matching the
+map India uses officially. The 10m source is simplified down to a ~110m weight
+(TopoJSON, ~190 KB) to keep the minimalist look and a small payload. Rebuild notes
+are in [`basemap/README.md`](basemap/README.md).
+
 ## External dependencies (loaded in the browser from CDNs)
 
 - [D3 7.9](https://d3js.org/) and [topojson-client 3.1](https://github.com/topojson/topojson-client) — map projection & rendering
-- [world-atlas](https://github.com/topojson/world-atlas) `countries-110m` — country outlines
 - IBM Plex Sans / Mono via Google Fonts
 
-The browser viewing the site needs to reach `unpkg.com`, `cdn.jsdelivr.net` and
-Google Fonts. (Some sandboxed networks block these; see the graceful-degradation
-note above.)
+The browser viewing the site needs to reach `unpkg.com` for the two libraries and
+Google Fonts for the typefaces; the basemap itself is local. (Some sandboxed
+networks block the CDNs — the fonts and libraries then fall back to system
+defaults / fail soft.)
 
 ## `design/` — source mockups
 

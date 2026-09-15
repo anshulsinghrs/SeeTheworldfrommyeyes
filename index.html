@@ -412,17 +412,20 @@ const zoom=d3.zoom().scaleExtent([1,36]).on('zoom',e=>{t=e.transform;draw();})
   .on('start',()=>svg.classed('dragging',1)).on('end',()=>svg.classed('dragging',0));
 svg.call(zoom).on('dblclick.zoom',null);
 
-d3.json('https://cdn.jsdelivr.net/npm/world-atlas@2.0.2/countries-110m.json').then(topo=>{
+d3.json('basemap/countries-india-pov.json').then(topo=>{
   land=topojson.feature(topo,topo.objects.countries);
   countries=land.features;
   fit();draw();
 }).catch(()=>{
-  // Basemap CDN unreachable (offline / blocked). The app still works —
-  // objects render on the graticule sphere — so degrade gracefully and say so.
+  // Basemap (local India point-of-view topojson) could not be read. The app
+  // still works — objects render on the graticule sphere — so degrade and say why.
   fit();draw();
+  const fileProto = location.protocol==='file:';
   const n=document.createElement('div');
   n.className='hint';n.style.cssText='top:auto;bottom:64px;left:16px;color:#E5A06B;z-index:46';
-  n.innerHTML='<b>Basemap offline</b>Country outlines could not be loaded. Your objects still plot by coordinate — reconnect to restore the map.';
+  n.innerHTML='<b>Basemap unavailable</b>'+(fileProto
+    ? 'Opened from a file:// path, so the browser blocks reading the map data. Serve the folder over HTTP (e.g. <span class="mono">python3 -m http.server</span>) to see country outlines. Objects still plot by coordinate.'
+    : 'Country outlines could not be loaded. Your objects still plot by coordinate — reload to restore the map.');
   document.body.appendChild(n);
 });
 
